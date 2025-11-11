@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <title>نظام المشتريات - جامعة الحدباء</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6fb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(90deg, #0b2e59, #1b4f72);
+            color: #fff;
+            padding: 15px 20px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        header small {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        nav a {
+            color: #ffdd76;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table th, table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+        table th {
+            background-color: #f0f3fa;
+            text-align: right;
+        }
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background-color: #1b4f72;
+            color: #fff;
+        }
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: #fff;
+        }
+        .btn-success {
+            background-color: #27ae60;
+            color: #fff;
+        }
+        .btn-danger {
+            background-color: #c0392b;
+            color: #fff;
+        }
+        .field {
+            margin-bottom: 10px;
+        }
+        .field label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .field input[type="text"],
+        .field input[type="email"],
+        .field input[type="number"],
+        .field textarea,
+        .field select {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #fff;
+        }
+        .status-قيد-التدقيق { background-color: #f39c12; }
+        .status-موافق { background-color: #27ae60; }
+        .status-مرفوض { background-color: #c0392b; }
+        footer {
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>نظام المشتريات الإلكتروني</h1>
+    <small>جامعة الحدباء الأهلية – قسم الشؤون المالية والإدارية</small>
+    <nav>
+        <a href="{{ url_for('list_requests') }}">قائمة الطلبات</a>
+        <a href="{{ url_for('new_request') }}">طلب تجهيز جديد</a>
+    </nav>
+</header>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+<footer>
+    إعداد: فاتن عبد المنعم عقيل – قسم الشؤون المالية
+</footer>
+</body>
+</html>

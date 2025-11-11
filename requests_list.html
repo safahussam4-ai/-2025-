@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2>قائمة طلبات التجهيز</h2>
+<a class="btn btn-primary" href="{{ url_for('new_request') }}">➕ طلب تجهيز جديد</a>
+<table>
+    <thead>
+        <tr>
+            <th>رقم الطلب</th>
+            <th>مقدم الطلب</th>
+            <th>القسم</th>
+            <th>القيمة التقديرية</th>
+            <th>صاحب الصلاحية</th>
+            <th>الحالة</th>
+            <th>تاريخ التقديم</th>
+            <th>تفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for r in requests %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.requester_name }}</td>
+            <td>{{ r.department }}</td>
+            <td>{{ "{:,.0f}".format(r.estimated_total) }} دينار</td>
+            <td>{{ r.approver_title }}</td>
+            <td>
+                {% set cls = "status-" + r.status.replace(" ", "-") %}
+                <span class="status-badge {{ cls }}">{{ r.status }}</span>
+            </td>
+            <td>{{ r.created_at }}</td>
+            <td><a class="btn btn-secondary" href="{{ url_for('request_detail', req_id=r.id) }}">عرض</a></td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">لا توجد طلبات مسجلة حتى الآن.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

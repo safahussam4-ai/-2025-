@@ -1,0 +1,34 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2>تفاصيل طلب التجهيز رقم {{ req.id }}</h2>
+
+<p><strong>مقدم الطلب:</strong> {{ req.requester_name }}</p>
+<p><strong>القسم / الوحدة:</strong> {{ req.department }}</p>
+<p><strong>البريد الإلكتروني:</strong> {{ req.email }}</p>
+<p><strong>العنوان الوظيفي:</strong> {{ req.job_title }}</p>
+<p><strong>وصف المادة / الخدمة:</strong><br>{{ req.item_description }}</p>
+<p><strong>الفئة:</strong> {{ req.category }}</p>
+<p><strong>الكمية:</strong> {{ req.quantity }} {{ req.unit }}</p>
+<p><strong>المواصفات الفنية:</strong><br>{{ req.specs }}</p>
+<p><strong>مبررات الطلب:</strong><br>{{ req.justification }}</p>
+<p><strong>القيمة التقديرية:</strong> {{ "{:,.0f}".format(req.estimated_total) }} دينار</p>
+<p><strong>صاحب الصلاحية:</strong> {{ req.approver_title }}</p>
+<p><strong>الحالة الحالية:</strong> {{ req.status }}</p>
+<p><strong>تاريخ التقديم:</strong> {{ req.created_at }}</p>
+
+<h3>تحديث حالة الطلب</h3>
+<form method="post" action="{{ url_for('update_status', req_id=req.id) }}">
+    <div class="field">
+        <label>الحالة</label>
+        <select name="status">
+            <option value="قيد التدقيق" {% if req.status == "قيد التدقيق" %}selected{% endif %}>قيد التدقيق</option>
+            <option value="موافق" {% if req.status == "موافق" %}selected{% endif %}>موافق</option>
+            <option value="مرفوض" {% if req.status == "مرفوض" %}selected{% endif %}>مرفوض</option>
+        </select>
+    </div>
+    <button class="btn btn-success" type="submit">تحديث الحالة</button>
+</form>
+
+<a class="btn btn-secondary" href="{{ url_for('list_requests') }}">العودة إلى قائمة الطلبات</a>
+{% endblock %}
