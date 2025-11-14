@@ -1,60 +1,67 @@
-
 {% extends "base.html" %}
+{% block title %}طلب تجهيز جديد{% endblock %}
+
 {% block content %}
-<h2>طلب تجهيز جديد</h2>
-<form method="post">
-    <div class="field">
-        <label>اسم مقدم الطلب</label>
-        <input type="text" name="requester_name" required>
+<div class="card">
+    <div class="card-header">
+        <div>
+            <div class="card-title">طلب تجهيز جديد</div>
+            <div class="card-subtitle">نموذج إلكتروني لطلب المشتريات من الأقسام والكليات</div>
+        </div>
     </div>
-    <div class="field">
-        <label>القسم / الوحدة</label>
-        <input type="text" name="department" required>
-    </div>
-    <div class="field">
-        <label>البريد الإلكتروني</label>
-        <input type="email" name="email" required>
-    </div>
-    <div class="field">
-        <label>العنوان الوظيفي</label>
-        <input type="text" name="job_title">
-    </div>
-    <div class="field">
-        <label>وصف المادة أو الخدمة المطلوبة</label>
-        <textarea name="item_description" rows="3" required></textarea>
-    </div>
-    <div class="field">
-        <label>الفئة / نوع الطلب</label>
-        <select name="category" required>
-            <option value="">-- اختر --</option>
-            <option value="تشغيلي">مواد تشغيلية</option>
-            <option value="تجهيزات فنية">تجهيزات فنية / مختبرية</option>
-            <option value="إنشائي">تجهيزات إنشائية / صيانة مبانٍ</option>
-            <option value="برامج">برامج / أنظمة إلكترونية</option>
-            <option value="خدمات">خدمات عامة</option>
-            <option value="طارئ">طارئ / مستعجل</option>
-        </select>
-    </div>
-    <div class="field">
-        <label>الكمية</label>
-        <input type="number" name="quantity" min="1" value="1">
-    </div>
-    <div class="field">
-        <label>وحدة القياس</label>
-        <input type="text" name="unit" placeholder="قطعة، جهاز، لتر، ...">
-    </div>
-    <div class="field">
-        <label>المواصفات الفنية الأساسية</label>
-        <textarea name="specs" rows="3"></textarea>
-    </div>
-    <div class="field">
-        <label>مبررات الطلب</label>
-        <textarea name="justification" rows="3"></textarea>
-    </div>
-    <div class="field">
-        <label>القيمة التقديرية الإجمالية (بالدينار العراقي)</label>
-        <input type="text" name="estimated_total" required placeholder="مثال: 1500000">
-    </div>
-    <button class="btn btn-primary" type="submit">حفظ الطلب</button>
-</form>
+
+    <form method="post" action="{{ url_for('new_request') }}">
+        <div class="form-grid">
+            <div>
+                <label>اسم مقدم الطلب</label>
+                <input type="text" name="requester_name" required>
+            </div>
+            <div>
+                <label>القسم / الكلية / الوحدة</label>
+                <input type="text" name="department" required>
+            </div>
+            <div>
+                <label>البريد الإلكتروني الوظيفي</label>
+                <input type="email" name="email" required>
+            </div>
+            <div>
+                <label>المسمى الوظيفي</label>
+                <input type="text" name="job_title">
+            </div>
+            <div>
+                <label>التصنيف (أجهزة / أثاث / مواد مختبرية ...)</label>
+                <input type="text" name="category" required>
+            </div>
+            <div>
+                <label>الكمية</label>
+                <input type="number" name="quantity" min="1">
+            </div>
+            <div>
+                <label>وحدة القياس</label>
+                <input type="text" name="unit" placeholder="قطعة / مجموعة / جهاز ...">
+            </div>
+            <div>
+                <label>المبلغ التخميني الكلي (دينار)</label>
+                <input type="number" name="estimated_total" min="0" step="1000" required>
+            </div>
+        </div>
+
+        <div style="margin-top:16px;">
+            <label>وصف المواد المطلوبة</label>
+            <textarea name="item_description" required></textarea>
+        </div>
+        <div style="margin-top:10px;">
+            <label>المواصفات الفنية / التجارية</label>
+            <textarea name="specs"></textarea>
+        </div>
+        <div style="margin-top:10px;">
+            <label>مبررات الطلب</label>
+            <textarea name="justification"></textarea>
+        </div>
+
+        <div style="margin-top:18px;text-align:left;">
+            <button type="submit" class="btn-primary">إرسال الطلب</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
