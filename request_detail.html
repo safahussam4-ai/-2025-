@@ -1,34 +1,103 @@
-
 {% extends "base.html" %}
+{% block title %}تفاصيل الطلب رقم {{ req.id }}{% endblock %}
+
 {% block content %}
-<h2>تفاصيل طلب التجهيز رقم {{ req.id }}</h2>
-
-<p><strong>مقدم الطلب:</strong> {{ req.requester_name }}</p>
-<p><strong>القسم / الوحدة:</strong> {{ req.department }}</p>
-<p><strong>البريد الإلكتروني:</strong> {{ req.email }}</p>
-<p><strong>العنوان الوظيفي:</strong> {{ req.job_title }}</p>
-<p><strong>وصف المادة / الخدمة:</strong><br>{{ req.item_description }}</p>
-<p><strong>الفئة:</strong> {{ req.category }}</p>
-<p><strong>الكمية:</strong> {{ req.quantity }} {{ req.unit }}</p>
-<p><strong>المواصفات الفنية:</strong><br>{{ req.specs }}</p>
-<p><strong>مبررات الطلب:</strong><br>{{ req.justification }}</p>
-<p><strong>القيمة التقديرية:</strong> {{ "{:,.0f}".format(req.estimated_total) }} دينار</p>
-<p><strong>صاحب الصلاحية:</strong> {{ req.approver_title }}</p>
-<p><strong>الحالة الحالية:</strong> {{ req.status }}</p>
-<p><strong>تاريخ التقديم:</strong> {{ req.created_at }}</p>
-
-<h3>تحديث حالة الطلب</h3>
-<form method="post" action="{{ url_for('update_status', req_id=req.id) }}">
-    <div class="field">
-        <label>الحالة</label>
-        <select name="status">
-            <option value="قيد التدقيق" {% if req.status == "قيد التدقيق" %}selected{% endif %}>قيد التدقيق</option>
-            <option value="موافق" {% if req.status == "موافق" %}selected{% endif %}>موافق</option>
-            <option value="مرفوض" {% if req.status == "مرفوض" %}selected{% endif %}>مرفوض</option>
-        </select>
+<div class="card">
+    <div class="card-header">
+        <div>
+            <div class="card-title">تفاصيل طلب التجهيز #{{ req.id }}</div>
+            <div class="card-subtitle">
+                القسم: {{ req.department }} – مقدم الطلب: {{ req.requester_name }}
+            </div>
+        </div>
+        <div>
+            {% if "قيد" in req.status %}
+                <span class="status-pill status-pending">{{ req.status }}</span>
+            {% elif "موافق" in req.status %}
+                <span class="status-pill status-approved">{{ req.status }}</span>
+            {% elif "مرفوض" in req.status %}
+                <span class="status-pill status-rejected">{{ req.status }}</span>
+            {% elif "إرجاع" in req.status %}
+                <span class="status-pill status-return">{{ req.status }}</span>
+            {% else %}
+                <span class="status-pill">{{ req.status }}</span>
+            {% endif %}
+        </div>
     </div>
-    <button class="btn btn-success" type="submit">تحديث الحالة</button>
-</form>
 
-<a class="btn btn-secondary" href="{{ url_for('list_requests') }}">العودة إلى قائمة الطلبات</a>
+    <div class="form-grid" style="margin-bottom:18px;">
+        <div>
+            <label>اسم مقدم الطلب</label>
+            <div>{{ req.requester_name }}</div>
+        </div>
+        <div>
+            <label>القسم / الوحدة</label>
+            <div>{{ req.department }}</div>
+        </div>
+        <div>
+            <label>البريد الإلكتروني</label>
+            <div>{{ req.email }}</div>
+        </div>
+        <div>
+            <label>المسمى الوظيفي</label>
+            <div>{{ req.job_title or "-" }}</div>
+        </div>
+        <div>
+            <label>التصنيف</label>
+            <div>{{ req.category }}</div>
+        </div>
+        <div>
+            <label>الكمية</label>
+            <div>{{ req.quantity }} {{ req.unit }}</div>
+        </div>
+        <div>
+            <label>المبلغ التخميني الكلي</label>
+            <div>{{ "{:,.0f}".format(req.estimated_total) }} د.ع</div>
+        </div>
+        <div>
+            <label>صاحب الصلاحية</label>
+            <div>{{ req.approver_title }}</div>
+        </div>
+        <div>
+            <label>تاريخ إنشاء الطلب</label>
+            <div>{{ req.created_at }}</div>
+        </div>
+        <div>
+            <label>تاريخ القرار</label>
+            <div>{{ req.decided_at or "-" }}</div>
+        </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+        <label>وصف المواد المطلوبة</label>
+        <div>{{ req.item_description }}</div>
+    </div>
+    <div style="margin-bottom:12px;">
+        <label>المواصفات الفنية / التجارية</label>
+        <div>{{ req.specs or "-" }}</div>
+    </div>
+    <div style="margin-bottom:18px;">
+        <label>مبررات الطلب</label>
+        <div>{{ req.justification or "-" }}</div>
+    </div>
+
+    <hr style="margin:14px 0;">
+
+    <h4 style="margin-top:0;">إجراء صاحب الصلاحية</h4>
+    <p style="font-size:12px;color:#555;">
+        آخر إجراء بواسطة: {{ req.approver_name or "-" }}
+    </p>
+
+    <form method="post" action="{{ url_for('request_decision', rid=req.id) }}">
+        <div style="margin-bottom:10px;">
+            <label>ملاحظة القرار</label>
+            <textarea name="note" placeholder="سبب الموافقة / الرفض / الإرجاع للاستكمال"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="submit" name="action" value="approve" class="btn-primary">موافقة</button>
+            <button type="submit" name="action" value="reject" class="btn-secondary">رفض</button>
+            <button type="submit" name="action" value="return" class="btn-secondary">إرجاع للاستكمال</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
