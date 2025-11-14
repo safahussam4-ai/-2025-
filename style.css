@@ -1,0 +1,90 @@
+/* ---------------------------
+   جامعة الحدباء الأهلية – نظام المشتريات
+   تصميم حديث بلون نيلي وذهبي
+---------------------------- */
+
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f5f7fa;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #002b5c; /* نيلي غامق */
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+h1, h2, h3 {
+    color: #002b5c;
+    text-align: center;
+}
+
+.container {
+    width: 85%;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+button {
+    background-color: #c5a100; /* ذهبي */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #a78800;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #002b5c;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+input[type=text], input[type=number], select {
+    width: 95%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+footer {
+    background-color: #002b5c;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 13px;
+    margin-top: 40px;
+    border-top: 3px solid #c5a100;
+}
