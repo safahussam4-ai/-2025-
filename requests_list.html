@@ -1,41 +1,89 @@
-
 {% extends "base.html" %}
+{% block title %}إدارة الطلبات – نظام المشتريات{% endblock %}
+
 {% block content %}
-<h2>قائمة طلبات التجهيز</h2>
-<a class="btn btn-primary" href="{{ url_for('new_request') }}">➕ طلب تجهيز جديد</a>
-<table>
-    <thead>
-        <tr>
-            <th>رقم الطلب</th>
-            <th>مقدم الطلب</th>
-            <th>القسم</th>
-            <th>القيمة التقديرية</th>
-            <th>صاحب الصلاحية</th>
-            <th>الحالة</th>
-            <th>تاريخ التقديم</th>
-            <th>تفاصيل</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for r in requests %}
-        <tr>
-            <td>{{ r.id }}</td>
-            <td>{{ r.requester_name }}</td>
-            <td>{{ r.department }}</td>
-            <td>{{ "{:,.0f}".format(r.estimated_total) }} دينار</td>
-            <td>{{ r.approver_title }}</td>
-            <td>
-                {% set cls = "status-" + r.status.replace(" ", "-") %}
-                <span class="status-badge {{ cls }}">{{ r.status }}</span>
-            </td>
-            <td>{{ r.created_at }}</td>
-            <td><a class="btn btn-secondary" href="{{ url_for('request_detail', req_id=r.id) }}">عرض</a></td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="8">لا توجد طلبات مسجلة حتى الآن.</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-header">
+        <div>
+            <div class="card-title">إدارة طلبات التجهيز</div>
+            <div class="card-subtitle">عرض ومتابعة حالة طلبات المشتريات مع إمكانية الفلترة</div>
+        </div>
+    </div>
+
+    <form method="get" style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+        <div>
+            <label>القسم / الكلية</label>
+            <input type="text" name="department" value="{{ request.args.get('department','') }}">
+        </div>
+        <div>
+            <label>الحالة</label>
+            <select name="status">
+                <option value="">كل الحالات</option>
+                <option value="قيد المراجعة" {% if request.args.get('status')=='قيد المراجعة' %}selected{% endif %}>قيد المراجعة</option>
+                <option value="موافق" {% if request.args.get('status')=='موافق' %}selected{% endif %}>موافق</option>
+                <option value="مرفوض" {% if request.args.get('status')=='مرفوض' %}selected{% endif %}>مرفوض</option>
+                <option value="إرجاع للاستكمال" {% if request.args.get('status')=='إرجاع للاستكمال' %}selected{% endif %}>إرجاع للاستكمال</option>
+            </select>
+        </div>
+        <div>
+            <label>من تاريخ</label>
+            <input type="date" name="date_from" value="{{ request.args.get('date_from','') }}">
+        </div>
+        <div>
+            <label>إلى تاريخ</label>
+            <input type="date" name="date_to" value="{{ request.args.get('date_to','') }}">
+        </div>
+        <div style="align-self:flex-end;">
+            <button class="btn-primary" type="submit">بحث</button>
+        </div>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>التاريخ</th>
+                <th>القسم / الوحدة</th>
+                <th>مقدم الطلب</th>
+                <th>المبلغ التخميني</th>
+                <th>صاحب الصلاحية</th>
+                <th>الحالة</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for r in requests %}
+            <tr>
+                <td>{{ r.id }}</td>
+                <td>{{ r.created_at }}</td>
+                <td>{{ r.department }}</td>
+                <td>{{ r.requester_name }}</td>
+                <td>{{ "{:,.0f}".format(r.estimated_total) }} د.ع</td>
+                <td>{{ r.approver_title }}</td>
+                <td>
+                    {% set st = r.status %}
+                    {% if "قيد" in st %}
+                        <span class="status-pill status-pending">{{ st }}</span>
+                    {% elif "موافق" in st %}
+                        <span class="status-pill status-approved">{{ st }}</span>
+                    {% elif "مرفوض" in st %}
+                        <span class="status-pill status-rejected">{{ st }}</span>
+                    {% elif "إرجاع" in st %}
+                        <span class="status-pill status-return">{{ st }}</span>
+                    {% else %}
+                        <span class="status-pill">{{ st }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('request_detail', rid=r.id) }}" class="btn-secondary">تفاصيل</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" style="text-align:center;color:#777;">لا توجد طلبات مطابقة للبحث.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
